@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>作品集</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #0d0d0d;
+    color: #e0e0e0;
+    min-height: 100vh;
+  }
+  header {
+    text-align: center;
+    padding: 48px 20px 32px;
+  }
+  header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #fff;
+  }
+  header p {
+    margin-top: 8px;
+    color: #888;
+    font-size: 14px;
+  }
+  .gallery {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 48px;
+  }
+  .gallery .card {
+    position: relative;
+    cursor: pointer;
+    background: #1a1a1a;
+    font-size: 0;
+    line-height: 0;
+  }
+  .gallery .card:not(:last-child) {
+    margin-bottom: 4px;
+  }
+  .gallery .card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .gallery .card img.loaded {
+    opacity: 1;
+  }
+  .gallery .card .number {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    backdrop-filter: blur(6px);
+    pointer-events: none;
+  }
+
+  /* lightbox */
+  .lightbox {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.92);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+  }
+  .lightbox.active { display: flex; }
+  .lightbox img {
+    max-width: 92vw;
+    max-height: 92vh;
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 0 60px rgba(0,0,0,0.6);
+    cursor: default;
+  }
+  .lightbox .close {
+    position: absolute;
+    top: 20px;
+    right: 28px;
+    font-size: 32px;
+    color: #aaa;
+    cursor: pointer;
+    line-height: 1;
+    user-select: none;
+    transition: color 0.2s;
+  }
+  .lightbox .close:hover { color: #fff; }
+  .lightbox .nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 40px;
+    color: #aaa;
+    cursor: pointer;
+    user-select: none;
+    padding: 16px;
+    transition: color 0.2s;
+  }
+  .lightbox .nav:hover { color: #fff; }
+  .lightbox .prev { left: 8px; }
+  .lightbox .next { right: 8px; }
+  .lightbox .counter {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #888;
+    font-size: 14px;
+  }
+
+  footer {
+    text-align: center;
+    padding: 20px;
+    color: #555;
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>作品集</h1>
+  <p>共 34 张作品 · 点击图片放大查看</p>
+</header>
+
+<div class="gallery" id="gallery"></div>
+
+<div class="lightbox" id="lightbox">
+  <span class="close" id="closeBtn">&times;</span>
+  <span class="nav prev" id="prevBtn">&lsaquo;</span>
+  <span class="nav next" id="nextBtn">&rsaquo;</span>
+  <img src="" alt="" id="lightboxImg">
+  <span class="counter" id="counter"></span>
+</div>
+
+<footer>作品集</footer>
+
+<script>
+  const total = 34;
+  const gallery = document.getElementById('gallery');
+  const images = [];
+
+  // generate cards
+  for (let i = 1; i <= total; i++) {
+    const num = String(i).padStart(2, '0');
+    const src = `作品集/${num}.png`;
+    const card = document.createElement('div');
+    card.className = 'card';
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = `作品 ${num}`;
+    img.loading = 'lazy';
+    img.onload = () => img.classList.add('loaded');
+    img.onerror = () => img.classList.add('loaded');
+
+    const numSpan = document.createElement('span');
+    numSpan.className = 'number';
+    numSpan.textContent = num;
+
+    card.appendChild(img);
+    card.appendChild(numSpan);
+    card.addEventListener('click', () => openLightbox(i - 1));
+    gallery.appendChild(card);
+    images.push(src);
+  }
+
+  // lightbox
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const counter = document.getElementById('counter');
+  let currentIndex = 0;
+
+  function openLightbox(index) {
+    currentIndex = index;
+    showImage();
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function showImage() {
+    const num = String(currentIndex + 1).padStart(2, '0');
+    lightboxImg.src = images[currentIndex];
+    lightboxImg.alt = `作品 ${num}`;
+    counter.textContent = `${currentIndex + 1} / ${total}`;
+  }
+
+  function nextImage() {
+    currentIndex = (currentIndex + 1) % total;
+    showImage();
+  }
+
+  function prevImage() {
+    currentIndex = (currentIndex - 1 + total) % total;
+    showImage();
+  }
+
+  document.getElementById('closeBtn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeLightbox();
+  });
+  document.getElementById('prevBtn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    prevImage();
+  });
+  document.getElementById('nextBtn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    nextImage();
+  });
+  lightbox.addEventListener('click', closeLightbox);
+  lightboxImg.addEventListener('click', (e) => e.stopPropagation());
+
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') nextImage();
+    if (e.key === 'ArrowLeft') prevImage();
+  });
+</script>
+
+</body>
+</html>
