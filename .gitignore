@@ -7,3 +7,5 @@ overlay-scroll-screenshot.png
 test-overlay.js
 作品集/*.png
 *.png
+!favicon-32x32.png
+!apple-touch-icon.png
