@@ -1,3 +1,8 @@
 作品集/thumbs/
 作品集/thumbs.json
 *.py
+.workbuddy/
+overlay-screenshot.png
+overlay-scroll-screenshot.png
+test-overlay.js
+作品集/*.png

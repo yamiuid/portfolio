@@ -1,416 +1,1446 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>作品集</title>
+<meta name="description" content="杨明 · UI/UX设计师 | 专注B端后台、物流供应链、移动端体验设计">
+<title>杨明 · UI/UX设计师</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: #0d0d0d;
-    color: #e0e0e0;
-    min-height: 100vh;
-  }
-  header {
-    text-align: center;
-    padding: 48px 20px 32px;
-  }
-  header h1 {
-    font-size: 28px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    color: #fff;
-  }
-  header p {
-    margin-top: 8px;
-    color: #888;
-    font-size: 14px;
-  }
-  .gallery {
-    padding-bottom: 48px;
-  }
-  .gallery .card {
-    position: relative;
-    cursor: pointer;
-    background: #1a1a1a;
-    overflow: hidden;
-    font-size: 0;
-    line-height: 0;
-  }
-  .gallery .card:not(:last-child) {
-    margin-bottom: 4px;
-  }
-  /* 模糊占位图 */
-  .card .thumb {
-    width: 100%;
-    height: auto;
-    display: block;
-    filter: blur(20px);
-    transform: scale(1.1);
-  }
-  /* 清晰图叠在上面，加载完后淡入 */
-  .card .full {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-  }
-  .card .full.loaded {
-    opacity: 1;
-  }
-  .card .number {
-    position: absolute;
-    bottom: 12px;
-    right: 12px;
-    background: rgba(0,0,0,0.55);
-    color: #fff;
-    font-size: 12px;
-    padding: 3px 8px;
-    border-radius: 4px;
-    backdrop-filter: blur(6px);
-    pointer-events: none;
-    z-index: 2;
-  }
+/* ========== CSS Variables ========== */
+:root {
+  --bg: #FFFFFF;
+  --bg-soft: #F8F9FC;
+  --bg-card: #FFFFFF;
+  --text: #111827;
+  --text-secondary: #4B5563;
+  --text-muted: #9CA3AF;
+  --accent: #3355FF;
+  --accent-hover: #2244EE;
+  --accent-light: #EBF0FF;
+  --accent-dim: #F5F7FF;
+  --border: #E5E7EB;
+  --border-light: #F3F4F6;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+  --nav-bg: rgba(255,255,255,0.85);
+  --overlay: rgba(0,0,0,0.5);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+}
 
-  /* lightbox */
-  .lightbox {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.94);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-    cursor: zoom-out;
-  }
-  .lightbox.active { display: flex; }
-  .lightbox img {
-    max-width: 95vw;
-    max-height: 95vh;
-    object-fit: contain;
-    border-radius: 4px;
-    box-shadow: 0 0 60px rgba(0,0,0,0.6);
-    cursor: default;
-  }
-  .lightbox .close {
-    position: absolute;
-    top: 20px;
-    right: 28px;
-    font-size: 32px;
-    color: #aaa;
-    cursor: pointer;
-    line-height: 1;
-    user-select: none;
-    z-index: 2;
-    transition: color 0.2s;
-  }
-  .lightbox .close:hover { color: #fff; }
-  .lightbox .nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 48px;
-    color: #aaa;
-    cursor: pointer;
-    user-select: none;
-    padding: 20px;
-    z-index: 2;
-    transition: color 0.2s;
-  }
-  .lightbox .nav:hover { color: #fff; }
-  .lightbox .prev { left: 4px; }
-  .lightbox .next { right: 4px; }
-  .lightbox .counter {
-    position: absolute;
-    bottom: 28px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: #888;
-    font-size: 14px;
-    z-index: 2;
-  }
+[data-theme="dark"] {
+  --bg: #0B0C0F;
+  --bg-soft: #111318;
+  --bg-card: #16181D;
+  --text: #F3F4F6;
+  --text-secondary: #9CA3AF;
+  --text-muted: #6B7280;
+  --accent: #5C7AFF;
+  --accent-hover: #7A96FF;
+  --accent-light: #1A2350;
+  --accent-dim: #12183A;
+  --border: #272A33;
+  --border-light: #1A1D24;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+  --nav-bg: rgba(11,12,15,0.85);
+  --overlay: rgba(0,0,0,0.75);
+}
 
-  footer {
-    text-align: center;
-    padding: 20px;
-    color: #555;
-    font-size: 12px;
+/* ========== Reset & Base ========== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+body {
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.35s ease, color 0.35s ease;
+}
+::selection { background: var(--accent); color: #FFF; }
+
+/* ========== Navigation ========== */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  background: var(--nav-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--border-light);
+}
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+.nav-brand {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.3px;
+  text-decoration: none;
+}
+.nav-links {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  height: 64px;
+  gap: 4px;
+  list-style: none;
+  z-index: 1001;
+}
+.nav-links a {
+  display: block;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: color 0.2s ease, background 0.2s ease;
+  font-weight: 500;
+}
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-card);
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 16px;
+  transition: all 0.25s ease;
+  margin-left: 8px;
+}
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.mobile-menu-btn { display: none; width: 36px; height: 36px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg-card); cursor: pointer; color: var(--text); font-size: 18px; justify-content: center; }
+
+/* ========== Hero ========== */
+.hero {
+  height: calc(100vh + 80px);
+  display: flex;
+  align-items: center;
+  padding: 20px 0 60px;
+  background: var(--bg);
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+}
+/* Canvas grid overlay */
+#heroGrid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+/* Static glow blobs */
+.hero::after {
+  content: '';
+  position: absolute;
+  width: 600px; height: 600px;
+  top: -150px; left: -100px;
+  background: radial-gradient(circle, rgba(51,85,255,0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+/* Bottom-right glow blob */
+.hero-blob-br {
+  position: absolute;
+  width: 700px; height: 700px;
+  bottom: -200px; right: -150px;
+  background: radial-gradient(circle, rgba(51,85,255,0.07) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+[data-theme="dark"] .hero-blob-br {
+  background: radial-gradient(circle, rgba(92,122,255,0.09) 0%, transparent 65%);
+}
+.hero-content {
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+.hero-title {
+  font-size: 64px;
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1.05;
+  color: var(--text);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.hero-slash {
+  color: var(--accent);
+  font-weight: 300;
+  font-size: 0.85em;
+}
+.hero-role {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+.hero-accent { color: var(--accent); }
+.hero-desc {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 28px;
+  max-width: 460px;
+}
+.hero-stats {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 32px;
+}
+.hero-stat-item {
+  display: flex;
+  flex-direction: column;
+  padding: 0 24px;
+}
+.hero-stat-item:first-child { padding-left: 0; }
+.hero-stat-num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+.hero-stat-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+.hero-stat-divider {
+  width: 1px;
+  height: 36px;
+  background: var(--border);
+}
+.hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 28px;
+  background: var(--accent);
+  color: #FFF;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(51,85,255,0.3); }
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 28px;
+  background: var(--bg-card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Hero decoration */
+.hero-deco {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 440px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-right {
+  position: relative;
+}
+.deco-circle {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  background: transparent;
+  z-index: 1;
+  top: -40px;
+  right: 110px;
+}
+.deco-bg-block {
+  position: absolute;
+  width: 310px;
+  height: 340px;
+  background: var(--accent);
+  border-radius: 0;
+  z-index: 2;
+  bottom: -50px;
+  right: 50px;
+}
+.hero-photo {
+  position: absolute;
+  z-index: 15;
+  width: 627px;
+  height: auto;
+  object-fit: contain;
+  bottom: -560px;
+  right: -35px;
+}
+.deco-dots {
+  position: absolute;
+  top: 0; right: 0;
+  width: 100%; height: 100%;
+}
+.deco-dots::before,
+.deco-dots::after {
+  content: '';
+  position: absolute;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.deco-dots::before { top: 30px; right: 80px; }
+.deco-dots::after { top: 100px; right: 20px; width: 4px; height: 4px; opacity: 0.5; }
+
+/* ========== Section Base ========== */
+.section {
+  padding: 80px 32px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+.section-number {
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -1.5px;
+  line-height: 1;
+}
+.section-title-group { flex: 1; }
+.section-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.3px;
+  margin-bottom: 2px;
+}
+.section-en {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Skills — frosted glass overlay */
+#skills {
+  position: relative;
+  z-index: 10;
+  margin-top: -80px;
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding-top: 48px;
+  padding-bottom: 60px;
+}
+[data-theme="dark"] #skills {
+  background: rgba(11,12,15,0.82);
+}
+
+/* Following sections also above hero */
+#skills ~ .section {
+  position: relative;
+  z-index: 5;
+  background: var(--bg);
+}
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+.skill-tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 8px;
+  background: var(--bg-soft);
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  cursor: default;
+}
+.skill-tag:hover {
+  background: var(--accent);
+  color: #FFF;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(51,85,255,0.25);
+}
+
+/* ========== Experience ========== */
+.timeline {
+  position: relative;
+  padding-left: 28px;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: var(--border);
+}
+.exp-card {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 24px 28px;
+  margin-bottom: 16px;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.exp-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--border);
+}
+.exp-card::before {
+  content: '';
+  position: absolute;
+  left: -24px;
+  top: 30px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 0 2px var(--accent-light);
+}
+.exp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.exp-company {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+.exp-role {
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 600;
+  margin-top: 2px;
+}
+.exp-date {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.exp-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+.exp-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.exp-tag {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-weight: 500;
+}
+.exp-more { text-align: center; margin-top: 8px; }
+.exp-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 20px;
+  background: var(--bg-soft);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.exp-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.exp-toggle .arrow { transition: transform 0.3s ease; }
+.exp-toggle.expanded .arrow { transform: rotate(180deg); }
+.exp-hidden { display: none; }
+.exp-hidden.show { display: block; }
+
+/* ========== Projects ========== */
+.project-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 24px 28px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.project-card:hover {
+  border-color: var(--border);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.project-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+}
+.project-icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.project-body { flex: 1; min-width: 0; }
+.project-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.project-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+.project-link {
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.project-arrow {
+  font-size: 16px;
+  color: var(--accent);
+  transition: transform 0.3s ease;
+}
+.project-card.open .project-arrow { transform: rotate(180deg); }
+.project-detail {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.project-card.open .project-detail { max-height: 600px; }
+.project-detail-inner {
+  padding-top: 16px;
+  margin-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.project-detail-block { margin-bottom: 12px; }
+.project-detail-block h4 {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.project-detail-block p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ========== Portfolio Preview ========== */
+.portfolio-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.portfolio-preview-item {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  background: var(--bg-card);
+}
+.portfolio-preview-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.portfolio-preview-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.portfolio-preview-item:hover .portfolio-preview-overlay {
+  opacity: 1;
+}
+.portfolio-preview-btn {
+  padding: 12px 28px;
+  background: var(--accent);
+  color: #FFF;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 16px rgba(51,85,255,0.3);
+}
+.portfolio-preview-btn:hover {
+  transform: scale(1.05);
+}
+
+/* ========== Portfolio Full Overlay ========== */
+.portfolio-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: #050505;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.portfolio-overlay.open {
+  display: block;
+}
+.portfolio-overlay-close {
+  position: fixed;
+  top: 16px;
+  right: 24px;
+  z-index: 2001;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #fff;
+  font-size: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+.portfolio-overlay-close:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.3);
+  transform: rotate(90deg) scale(1.05);
+}
+.portfolio-overlay-header {
+  display: none;
+}
+.portfolio-overlay-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.2px;
+}
+.portfolio-overlay-count {
+  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+  font-weight: 500;
+}
+.portfolio-overlay-inner {
+  padding: 12px 12px 12px;
+}
+.portfolio-overlay-item {
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.portfolio-overlay-item:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.portfolio-overlay-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  min-height: 40px;
+  background: rgba(255,255,255,0.02);
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+.portfolio-overlay-item img.loaded {
+  opacity: 1;
+  background: none;
+}
+
+/* ========== About ========== */
+.about-text {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.9;
+  max-width: 700px;
+  margin-bottom: 32px;
+}
+.about-contact {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.about-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+.about-contact-item a { color: var(--accent); text-decoration: none; }
+.about-contact-item a:hover { text-decoration: underline; }
+
+/* ========== Footer ========== */
+.footer {
+  text-align: center;
+  padding: 32px;
+  border-top: 1px solid var(--border-light);
+}
+.footer-text {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+
+/* ========== Animations ========== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ========== Responsive ========== */
+@media (max-width: 900px) {
+  .hero-content { grid-template-columns: 1fr; text-align: center; gap: 40px; }
+  .hero-title { font-size: 48px; justify-content: center; }
+  .hero-role { font-size: 28px; }
+  .hero-desc { margin: 0 auto 28px; }
+  .hero-stats { justify-content: center; }
+  .hero-btns { justify-content: center; }
+  .hero-deco { display: none; }
+  .skills-grid { grid-template-columns: repeat(4, 1fr); }
+  .portfolio-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .section { padding: 60px 20px; }
+  #skills { margin-top: -80px; padding-top: 36px; padding-left: 20px; padding-right: 20px; }
+  .hero-stats { flex-wrap: wrap; gap: 8px 0; }
+  .hero-stat-item { padding: 0 16px; }
+  .hero-stat-num { font-size: 24px; }
+  .skills-grid { grid-template-columns: repeat(3, 1fr); }
+  .exp-header { flex-direction: column; gap: 4px; }
+  .project-card { flex-direction: column; gap: 12px; }
+  .nav-links { display: none; position: fixed; top: 64px; left: 0; right: 0; transform: none; height: auto; }
+  .nav-links.open {
+    display: flex; flex-direction: column;
+    z-index: 999;
+    background: var(--nav-bg);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+    padding: 20px 24px; gap: 6px;
   }
+  .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
+  .about-contact { flex-direction: column; gap: 12px; align-items: flex-start; }
+}
+@media (max-width: 480px) {
+  .hero-title { font-size: 40px; }
+  .hero-role { font-size: 24px; }
+  .hero-stats { flex-wrap: wrap; justify-content: center; gap: 0; }
+  .hero-stat-item { padding: 0 12px; }
+  .hero-stat-divider { height: 28px; }
+  .hero-stat-num { font-size: 22px; }
+  .hero-stat-label { font-size: 12px; }
+  .skills-grid { grid-template-columns: repeat(2, 1fr); }
+  .section-number { font-size: 36px; }
+}
 </style>
 </head>
 <body>
 
-<header>
-  <h1>作品集</h1>
-  <p>共 34 张作品 · 点击图片放大查看 · WebP 优化加载</p>
-</header>
+<!-- ==================== NAVIGATION ==================== -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-brand">杨明</a>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button class="theme-toggle" id="themeToggle" aria-label="切换主题">◐</button>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="菜单">☰</button>
+    </div>
+  </div>
+</nav>
+<ul class="nav-links" id="navLinks">
+  <li><a href="#hero">首页</a></li>
+  <li><a href="#skills">能力</a></li>
+  <li><a href="#experience">经历</a></li>
+  <li><a href="#projects">项目</a></li>
+  <li><a href="#portfolio">作品集</a></li>
+  <li><a href="#about">关于我</a></li>
+</ul>
 
-<div class="gallery" id="gallery">
-      <div class="card" onclick="openLightbox(0)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDCHklBlmB9hUbhARsJPHORimBjRnmmBIIgRywophJooEf/2Q==" alt="">
-        <img class="full" src="作品集/01.webp" alt="作品 01" loading="lazy" onerror="this.onerror=null;this.src='作品集/01.png'">
-        <span class="number">01</span>
+<!-- ==================== HERO ==================== -->
+<section class="hero" id="hero">
+  <canvas id="heroGrid"></canvas>
+  <div class="hero-blob-br"></div>
+  <div class="hero-content">
+    <div class="hero-left">
+      <h1 class="hero-title">杨明 <span class="hero-slash">/</span></h1>
+      <h2 class="hero-role">资深 <span class="hero-accent">UI/UX</span> 设计师</h2>
+      <p class="hero-desc">
+        专注于 B 端后台、物流供应链、移动端体验设计<br>
+        用系统化思维与极致细节，帮助企业提升效率与价值。
+      </p>
+      <div class="hero-stats">
+        <div class="hero-stat-item">
+          <span class="hero-stat-num">10+</span>
+          <span class="hero-stat-label">年经验</span>
+        </div>
+        <div class="hero-stat-divider"></div>
+        <div class="hero-stat-item">
+          <span class="hero-stat-num">30+</span>
+          <span class="hero-stat-label">项目交付</span>
+        </div>
+        <div class="hero-stat-divider"></div>
+        <div class="hero-stat-item">
+          <span class="hero-stat-num">2+</span>
+          <span class="hero-stat-label">垂直行业</span>
+        </div>
+        <div class="hero-stat-divider"></div>
+        <div class="hero-stat-item">
+          <span class="hero-stat-num">5+</span>
+          <span class="hero-stat-label">核心技能</span>
+        </div>
       </div>
-      <div class="card" onclick="openLightbox(1)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDfTf5rZI2YG0Dr70/JBxnilHWnYHpTYAKKWikB/9k=" alt="">
-        <img class="full" src="作品集/02.webp" alt="作品 02" loading="lazy" onerror="this.onerror=null;this.src='作品集/02.png'">
-        <span class="number">02</span>
+      <div class="hero-btns">
+        <a href="#" class="btn-primary" onclick="event.preventDefault(); document.getElementById('portfolioOverlay').classList.add('open'); document.body.style.overflow='hidden'; window.scrollTo(0,0);">查看作品集 ↗</a>
+        <a href="杨明_UI简历.docx" class="btn-secondary" download>下载Word简历</a>
       </div>
-      <div class="card" onclick="openLightbox(2)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDovXg0MM8UtFMREUoqSincD//Z" alt="">
-        <img class="full" src="作品集/03.webp" alt="作品 03" loading="lazy" onerror="this.onerror=null;this.src='作品集/03.png'">
-        <span class="number">03</span>
+    </div>
+    <div class="hero-right">
+      <div class="hero-deco">
+        <div class="deco-bg-block"></div>
+        <div class="deco-circle"></div>
+        <img class="hero-photo" src="photo.png" alt="杨明">
       </div>
-      <div class="card" onclick="openLightbox(3)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAB4ABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDoMyAt8oIzwSf/AK1RTOPNjjyAGyWPpipynHc81GYATn5gT9KAKkxAkIjfcPXrRVk2MZxln/OimIkLtuI8vjPWoWun+3C1WNcmPzNxPvjFWTgdx1qs9sft63SyL/qjHtI985oAnzN6R/maKMS+sf60Uhjn5xyBzScccioIXmnab94qhJCgG3PApySuGkVju2sACBjsDTAsDpRTAxI9KKQEIhVXcrvXcdxw5AJqhPfyW95NBBAJCqh2LOcnitVcYqtNp9vNO8rK+9gASrkZA+lMBNMujfWvnMnlncV2g56UVLbQR2kXlQqVXJOCc8migRMvApagiuDLJMiIf3T7CS2M8A/1qQMeQQcg9jmkMV+tFO2g880UwII7fyJJnWT/AFr7yCOnAH9KEnH2l4QC7hQ5wABg5x39qe4faTvXgf3f/r1CkIFy9wjEMyKpBHHGf8aQFne3/PNvzH+NFJtkP/LQf980UANIZgV8z/x2mwXCzIWjjYqrFcnA5BxUq1S0lh9lfLAfvpO/+0aALyNuB4IwcYNFNiIO/Bz8xooA5y41LVkmcJuADEAeTnjP0qH+0dW3Hg/X7P8A/WoopsSNPTby/lgZpEbIbAzHjsP/AK9FFFIZ/9k=" alt="">
-        <img class="full" src="作品集/04.webp" alt="作品 04" loading="lazy" onerror="this.onerror=null;this.src='作品集/04.png'">
-        <span class="number">04</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 01. SKILLS ==================== -->
+<section class="section reveal" id="skills">
+  <div class="section-header">
+    <div class="section-number">01.</div>
+    <div class="section-title-group">
+      <h2 class="section-title">能力标签</h2>
+      <div class="section-en">SKILLS</div>
+    </div>
+  </div>
+  <div class="skills-grid">
+    <span class="skill-tag">B端后台设计</span>
+    <span class="skill-tag">物流供应链</span>
+    <span class="skill-tag">组件化设计</span>
+    <span class="skill-tag">App设计</span>
+    <span class="skill-tag">小程序设计</span>
+    <span class="skill-tag">信息架构</span>
+    <span class="skill-tag">交互设计</span>
+    <span class="skill-tag">视觉设计</span>
+    <span class="skill-tag">数据可视化</span>
+    <span class="skill-tag">AI工具</span>
+    <span class="skill-tag">原型设计</span>
+    <span class="skill-tag">设计规范</span>
+    <span class="skill-tag">用户研究</span>
+    <span class="skill-tag">竞品分析</span>
+  </div>
+</section>
+
+<!-- ==================== 02. EXPERIENCE ==================== -->
+<section class="section reveal" id="experience">
+  <div class="section-header">
+    <div class="section-number">02.</div>
+    <div class="section-title-group">
+      <h2 class="section-title">工作经历</h2>
+      <div class="section-en">EXPERIENCE</div>
+    </div>
+  </div>
+  <div class="timeline">
+    <div class="exp-card">
+      <div class="exp-header">
+        <div>
+          <div class="exp-company">顺丰科技有限公司（驻场）</div>
+          <div class="exp-role">高级UI设计师</div>
+        </div>
+        <div class="exp-date">2024.05 — 2026.05</div>
       </div>
-      <div class="card" onclick="openLightbox(4)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCACDABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDO0bT1vrpopGZVVN2V69QP61vHQ7KGJmxIxVSfmb29qfBpKWrM8M0ilhg8A8VNLZvIgXz5F4wcKp3fmKd7bCOO87NFdF/wjFr/AM95/wBP8KKv2jCyNsAc0nagOpkMYb5wMke1I8kaHazgHrjPNZjHelFIHRhwwNFAGcZbsTc3MIAfn516Z6dKtNKhnLrcxqCAOqnPWuQnCC6uN4U5L4yehzVbA3YwMVpN+Qkd8sgcZWRGHsc0VzWijFq//XQ/yFFZjL0nh2J5ZH+1SLvJyNo71B/wjkRY4mmOCRnC/wCNb+7BJx171GC6bh5efmJyGHc0wKFnpaWkRjzK2W3ZJUf56UVo75P+eZ/76FFICTA5yvFBCg9KiVAAQYSTk84FOCYjwUzyePxoAkwtFRbR/wA8f0FFAGVFa3IvYX+zzLtlJeQy5Vl57Z+lbAOB/wDXpguAWZQjMQe2P8adv4/1TfkKdgHg0UitkfcI+tFAEQ2hiS69T/nrUq8qOQfcUc9qQyKpwx5+lAElFMV1YZB/SilYCu92EPKjqR196dHOZJcDG0xhx+JNZ7a3YQTPlZywJB+XI6/Wj/hIrDdu8qbdjGdgz/OmBrg8UVTttUtrhC6BwAccr7Z/rRSAzrjT7VppMxnlifvH1+tR/wBnWuc+Wc/77f40UU2Bo6dZW8cDBY+rE/eJ7CiiikB//9k=" alt="">
-        <img class="full" src="作品集/05.webp" alt="作品 05" loading="lazy" onerror="this.onerror=null;this.src='作品集/05.png'">
-        <span class="number">05</span>
+      <p class="exp-desc">负责顺丰国际相关B端后台、内部系统整合、移动端工具及面客体验优化设计，覆盖国际货运平台、系统整合平台、国际电商下单优化、数据统计与竞品分析等方向。</p>
+      <div class="exp-tags">
+        <span class="exp-tag">B端后台</span>
+        <span class="exp-tag">物流供应链</span>
+        <span class="exp-tag">系统整合</span>
+        <span class="exp-tag">国际货运</span>
       </div>
-      <div class="card" onclick="openLightbox(5)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCABuABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDfUOHIIG3PBzTGYlZWBb5c4APoKscc9aheJAjrk/vCefTNO4DopkliSRD8rgEUVHZ2i29rHCshcKOGPeinoTqT7gGIxWW2sof+Xdj/AMCFaMkoVyPLZsdSMcVTGk2vUeb6/eq6fIvjB36FqyuBdQCRUKDJGCc9KKW2hS2i8uPO3OeTRUStd22GgbO6TAH+RThwFAXJI9ae0aMclQTSMQsgycDBqRiL8wzjFFLH938T/OincCPnyg245+vtTwCGGMnI5yawxfXd5p6JBayfKVzIJBzjr+dVdR1mS6SMRJJAVJyQ/X24pAdVRXDi9ux0upv++zRQB0HhzB08Aj+Nqp6dHpzWgNw0XmbjkM+D1PvW6VwzbBj1wcZ4+lOVYyB+7HT0oA4y9WJbyVYSpjDfKVORRXbBEHRV/KigBn8b/wCe1AY/KBgfKOopzBSc4XPuKTcBJyR0oAchJXJ60UiMNvXuf50UAQHIy/HUinHdvC5Bz7U8xE5GRgnNGxshuMimAi5xz2OKKkVcDnGetFAH/9k=" alt="">
-        <img class="full" src="作品集/06.webp" alt="作品 06" loading="lazy" onerror="this.onerror=null;this.src='作品集/06.png'">
-        <span class="number">06</span>
+    </div>
+
+    <div class="exp-card">
+      <div class="exp-header">
+        <div>
+          <div class="exp-company">深圳玖昔科技发展股份有限公司</div>
+          <div class="exp-role">高级UI设计师</div>
+        </div>
+        <div class="exp-date">2021.08 — 2023.07</div>
       </div>
-      <div class="card" onclick="openLightbox(6)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCABwABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDoCXDH5QRng5/+tTTG0hJMki+ytx/KoxdZujB9muAM48zZ8v506S0hkcl1Yt65NAEDaPaO7OyuWY5YlupoqZbC3xwH/wC+zRQBZGMnmo/NHTEmQeu2pBnceuKTHB/woAVW3DOCPqMUUL0ooA4fy7/j5Lv3wGo8u/8A7l3+TV188yieGAlt0rHGDjgDJ/pRdFLW3ecl8INx+YnjP1oA4/y9Q/uXf5NRXcRncuQcg9DRQBVezEt8l0Z2zGCqJxgZ60XqLLC9vK0hWRcHy4yTirW2m4/env8AKP60AV7WQQW6RHz5CgxuMRyf0oq1gelFADRuyfmP0pu8JK25h90YyfrTGjkRS32hyQM4IX/CpMNn7w69MUwF86P++v8A31RTSOaKQx0uPLYe1OAOT0/KozlsruX0PB/xqXcKBC4HpRSbhRQAz1o6dqUdT8v0ozxnYfpQAg5FFPABHSimB//Z" alt="">
-        <img class="full" src="作品集/07.webp" alt="作品 07" loading="lazy" onerror="this.onerror=null;this.src='作品集/07.png'">
-        <span class="number">07</span>
+      <p class="exp-desc">独立负责「一起漫部」App的UI设计，深入用户研究获取关键洞察，基于反馈快速迭代优化界面布局和交互逻辑。搭建并优化可复用的UI组件和设计规范。</p>
+      <div class="exp-tags">
+        <span class="exp-tag">App设计</span>
+        <span class="exp-tag">用户研究</span>
+        <span class="exp-tag">设计系统</span>
+        <span class="exp-tag">粉丝社区</span>
       </div>
-      <div class="card" onclick="openLightbox(7)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDZbfvACDb3OaimZmlEOdobvwfrx/nrVphUbxqcSEfMvAOemcVw07Rk2zR6oSMhVwORk0UnSiuadRuTaLUbI//Z" alt="">
-        <img class="full" src="作品集/08.webp" alt="作品 08" loading="lazy" onerror="this.onerror=null;this.src='作品集/08.png'">
-        <span class="number">08</span>
+    </div>
+
+    <div class="exp-card">
+      <div class="exp-header">
+        <div>
+          <div class="exp-company">深圳掌众智能科技股份有限公司</div>
+          <div class="exp-role">高级UI设计师</div>
+        </div>
+        <div class="exp-date">2019.09 — 2021.05</div>
       </div>
-      <div class="card" onclick="openLightbox(8)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDoiwWTbuG5ugJrM1HYLwhSd8iYf5sBVH+frWtgZzjmsjV1CNJIvDnywSO4JIotcFuV5II7lzLNdLA3TY4BwPrRWjJawKdqpgAYABIoqdSrI//Z" alt="">
-        <img class="full" src="作品集/09.webp" alt="作品 09" loading="lazy" onerror="this.onerror=null;this.src='作品集/09.png'">
-        <span class="number">09</span>
+      <p class="exp-desc">负责多个App的UI视觉风格设计，主导小沃项目的H5设计和插画海报设计，在多产品线并行环境下保证设计品质的一致性。</p>
+      <div class="exp-tags">
+        <span class="exp-tag">App设计</span>
+        <span class="exp-tag">H5</span>
+        <span class="exp-tag">插画设计</span>
+        <span class="exp-tag">多产品线</span>
       </div>
-      <div class="card" onclick="openLightbox(9)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDfC/MwGfX1oBG0nGcdamwKMDpgU7isRhQRkUVJRRcLH//Z" alt="">
-        <img class="full" src="作品集/10.webp" alt="作品 10" loading="lazy" onerror="this.onerror=null;this.src='作品集/10.png'">
-        <span class="number">10</span>
+    </div>
+
+    <div class="exp-hidden" id="expFolded">
+      <div class="exp-card">
+        <div class="exp-header">
+          <div>
+            <div class="exp-company">深圳维拉假日科技有限公司</div>
+            <div class="exp-role">UI设计师</div>
+          </div>
+          <div class="exp-date">2016.06 — 2019.04</div>
+        </div>
+        <p class="exp-desc">负责「爱订房」App与小程序的UI视觉设计，以及日常运营海报和活动设计。</p>
+        <div class="exp-tags">
+          <span class="exp-tag">App设计</span>
+          <span class="exp-tag">小程序</span>
+          <span class="exp-tag">运营设计</span>
+        </div>
       </div>
-      <div class="card" onclick="openLightbox(10)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDoAvU8/nS7AfWngDFLincRCRg4opz/AHqKYH//2Q==" alt="">
-        <img class="full" src="作品集/11.webp" alt="作品 11" loading="lazy" onerror="this.onerror=null;this.src='作品集/11.png'">
-        <span class="number">11</span>
+      <div class="exp-card">
+        <div class="exp-header">
+          <div>
+            <div class="exp-company">武汉般若互动科技有限公司</div>
+            <div class="exp-role">设计组长</div>
+          </div>
+          <div class="exp-date">2014.04 — 2016.04</div>
+        </div>
+        <p class="exp-desc">负责团队每日设计工作分配与跨部门协调，主持每周设计分享会，同时参与H5、App等项目设计。设计师生涯的起点。</p>
+        <div class="exp-tags">
+          <span class="exp-tag">团队管理</span>
+          <span class="exp-tag">H5</span>
+          <span class="exp-tag">跨部门协作</span>
+        </div>
       </div>
-      <div class="card" onclick="openLightbox(11)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDfUfM3ufWlIweh+tS4FFO7FYjC5op560UXCx//2Q==" alt="">
-        <img class="full" src="作品集/12.webp" alt="作品 12" loading="lazy" onerror="this.onerror=null;this.src='作品集/12.png'">
-        <span class="number">12</span>
+    </div>
+  </div>
+  <div class="exp-more">
+    <button class="exp-toggle" id="expToggle">
+      展开更多经历 <span class="arrow">▾</span>
+    </button>
+  </div>
+</section>
+
+<!-- ==================== 03. PROJECTS ==================== -->
+<section class="section reveal" id="projects">
+  <div class="section-header">
+    <div class="section-number">03.</div>
+    <div class="section-title-group">
+      <h2 class="section-title">项目介绍</h2>
+      <div class="section-en">PROJECTS</div>
+    </div>
+  </div>
+
+  <div class="project-card" onclick="this.classList.toggle('open')">
+    <div class="project-icon"><img src="project-icon-1.png" alt="国际货运平台"></div>
+    <div class="project-body">
+      <div class="project-name">国际货运平台（B端后台）</div>
+      <div class="project-desc">面向顺丰国际货运业务，支持线路模板、产品线路创建、账单处理等后台业务场景，涉及字段多、流程长、状态复杂，需要提升业务配置与处理效率。</div>
+      <div class="project-link">查看详情 <span class="project-arrow">→</span></div>
+      <div class="project-detail">
+        <div class="project-detail-inner">
+          <div class="project-detail-block">
+            <h4>我的职责</h4>
+            <p>参与线路模板、产品线路创建、代理/应付账单工作台等模块设计。梳理业务流程、字段分组、状态展示和操作路径，输出高保真设计稿与交互说明。优化后台表格、筛选查询、批量操作、异常提示等高频使用场景。</p>
+          </div>
+          <div class="project-detail-block">
+            <h4>项目价值</h4>
+            <p>提升业务人员在线路配置、账单查询与处理中的操作效率。沉淀复杂 B端后台在表格、表单、状态和工作台设计上的实践经验。</p>
+          </div>
+        </div>
       </div>
-      <div class="card" onclick="openLightbox(12)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDpMYJ68+9LmlpKAFopvSigD//Z" alt="">
-        <img class="full" src="作品集/13.webp" alt="作品 13" loading="lazy" onerror="this.onerror=null;this.src='作品集/13.png'">
-        <span class="number">13</span>
+    </div>
+  </div>
+
+  <div class="project-card" onclick="this.classList.toggle('open')">
+    <div class="project-icon"><img src="project-icon-2.png" alt="擎苍系统"></div>
+    <div class="project-body">
+      <div class="project-name">擎苍系统（B端后台）</div>
+      <div class="project-desc">顺丰国际内部存在多个业务系统，员工需要频繁切换系统、查找入口和申请权限，使用路径分散，操作成本较高。</div>
+      <div class="project-link">查看详情 <span class="project-arrow">→</span></div>
+      <div class="project-detail">
+        <div class="project-detail-inner">
+          <div class="project-detail-block">
+            <h4>我的职责</h4>
+            <p>参与擎苍系统及小程序设计，整合内部系统入口、常用功能、权限状态和问题反馈能力。设计"我的常用""全部系统""权限申请""系统分类导航"等核心模块。优化系统切换、权限状态展示、语言/风格切换等使用体验。</p>
+          </div>
+          <div class="project-detail-block">
+            <h4>项目价值</h4>
+            <p>降低员工查找系统、切换工具和申请权限的操作成本。提升内部系统入口的一致性、可访问性和使用效率。</p>
+          </div>
+        </div>
       </div>
-      <div class="card" onclick="openLightbox(13)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDdcFQxDBfc9KaGzGGDj/eA461MwBGCAR70gAAwAAPamIaAccnJ/KinUUwP/9k=" alt="">
-        <img class="full" src="作品集/14.webp" alt="作品 14" loading="lazy" onerror="this.onerror=null;this.src='作品集/14.png'">
-        <span class="number">14</span>
+    </div>
+  </div>
+
+  <div class="project-card" onclick="this.classList.toggle('open')">
+    <div class="project-icon"><img src="project-icon-3.png" alt="一起漫部"></div>
+    <div class="project-body">
+      <div class="project-name">一起漫部 App（移动端）</div>
+      <div class="project-desc">为粉丝提供陪伴idol成长的平台，加入粉丝会后可享受专属权益，包括购买限定精美周边、参与活动获取纪念徽章等。前期需要快速版本迭代，验证用户需求。</div>
+      <div class="project-link">查看详情 <span class="project-arrow">→</span></div>
+      <div class="project-detail">
+        <div class="project-detail-inner">
+          <div class="project-detail-block">
+            <h4>我的职责</h4>
+            <p>深入了解目标用户群体，获得关键的用户洞察。基于用户反馈，快速迭代改进界面布局和交互逻辑。基于用户体验和交互需求，搭建和优化可复用的UI组件和UI规范，提高设计效率和应用设计的一致性。</p>
+          </div>
+          <div class="project-detail-block">
+            <h4>项目业绩</h4>
+            <p>尽管用户基数有限，但通过用户访谈和反馈收集，我们对应用进行了成功的迭代，用户反馈显示了对新界面和交互的高满意度。</p>
+          </div>
+        </div>
       </div>
-      <div class="card" onclick="openLightbox(14)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDeX77jDcEdeh+lP284qSindhYjAyM4NFSUUXFY/9k=" alt="">
-        <img class="full" src="作品集/15.webp" alt="作品 15" loading="lazy" onerror="this.onerror=null;this.src='作品集/15.png'">
-        <span class="number">15</span>
-      </div>
-      <div class="card" onclick="openLightbox(15)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDoMD3zSbAueW9+KkA+WlIGelGoERGDiinN940VQj//2Q==" alt="">
-        <img class="full" src="作品集/16.webp" alt="作品 16" loading="lazy" onerror="this.onerror=null;this.src='作品集/16.png'">
-        <span class="number">16</span>
-      </div>
-      <div class="card" onclick="openLightbox(16)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDeYEA4J5qvcTPbcAbx6nOe3+NWyAeDSbQvShoCKFmeJXYAFhnAoqWiqEf/2Q==" alt="">
-        <img class="full" src="作品集/17.webp" alt="作品 17" loading="lazy" onerror="this.onerror=null;this.src='作品集/17.png'">
-        <span class="number">17</span>
-      </div>
-      <div class="card" onclick="openLightbox(17)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDdkMgnGGAQAcdyadO8ipmM5O7B47UOo3dOuKlwMUCsCElAT1xRSjpRQM//2Q==" alt="">
-        <img class="full" src="作品集/18.webp" alt="作品 18" loading="lazy" onerror="this.onerror=null;this.src='作品集/18.png'">
-        <span class="number">18</span>
-      </div>
-      <div class="card" onclick="openLightbox(18)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDe4DY9abHux+8cMfUDFSlQTkjkU3Az0HSncVhOD0ORRTqKYH//2Q==" alt="">
-        <img class="full" src="作品集/19.webp" alt="作品 19" loading="lazy" onerror="this.onerror=null;this.src='作品集/19.png'">
-        <span class="number">19</span>
-      </div>
-      <div class="card" onclick="openLightbox(19)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDoN7b2wynBxjPSmurElix9MelPYAn057cU7aNo4qJxuhp2IMGipcCiuR0jTmP/2Q==" alt="">
-        <img class="full" src="作品集/20.webp" alt="作品 20" loading="lazy" onerror="this.onerror=null;this.src='作品集/20.png'">
-        <span class="number">20</span>
-      </div>
-      <div class="card" onclick="openLightbox(20)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDoArZOenbioklZrh4ypABxnHWrVQKo+1MeenrTuKw/bRUlFFwsf//Z" alt="">
-        <img class="full" src="作品集/21.webp" alt="作品 21" loading="lazy" onerror="this.onerror=null;this.src='作品集/21.png'">
-        <span class="number">21</span>
-      </div>
-      <div class="card" onclick="openLightbox(21)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDfIPOemeMVGx27vnPynHXtVogEYI4pvlJjG0U7gQrnkAk4PfrRU6oq9Biii4rH/9k=" alt="">
-        <img class="full" src="作品集/22.webp" alt="作品 22" loading="lazy" onerror="this.onerror=null;this.src='作品集/22.png'">
-        <span class="number">22</span>
-      </div>
-      <div class="card" onclick="openLightbox(22)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDfGMsQaap5xuJyM1PsX+6KaIYx0UU7sLIaMetFSbF/uiii4WP/2Q==" alt="">
-        <img class="full" src="作品集/23.webp" alt="作品 23" loading="lazy" onerror="this.onerror=null;this.src='作品集/23.png'">
-        <span class="number">23</span>
-      </div>
-      <div class="card" onclick="openLightbox(23)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDbPmGYfOdrEjAJ96VN+7duY5YrjqO9TGJCxOOfqaVY1U8Dp71NrgOXOOetFLRVAf/Z" alt="">
-        <img class="full" src="作品集/24.webp" alt="作品 24" loading="lazy" onerror="this.onerror=null;this.src='作品集/24.png'">
-        <span class="number">24</span>
-      </div>
-      <div class="card" onclick="openLightbox(24)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDoNmCTk0AfLUpHFNwMYxTuKw0iingUUXCx/9k=" alt="">
-        <img class="full" src="作品集/25.webp" alt="作品 25" loading="lazy" onerror="this.onerror=null;this.src='作品集/25.png'">
-        <span class="number">25</span>
-      </div>
-      <div class="card" onclick="openLightbox(25)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDd2nccA/nRtYYzUJ+bUosk/wCpJ6+4q03C5rL2USrsic7TghunZSaKlJI/Kij2UQ5mf//Z" alt="">
-        <img class="full" src="作品集/26.webp" alt="作品 26" loading="lazy" onerror="this.onerror=null;this.src='作品集/26.png'">
-        <span class="number">26</span>
-      </div>
-      <div class="card" onclick="openLightbox(26)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDXnJhilkALFQSAeB+dVYbhp41ZoSGzjCNkD/Oau6rxptwR/wA8zVXQP3mnM75ZvMbk9e1O7MuRF3yxRUwop3D2aP/Z" alt="">
-        <img class="full" src="作品集/27.webp" alt="作品 27" loading="lazy" onerror="this.onerror=null;this.src='作品集/27.png'">
-        <span class="number">27</span>
-      </div>
-      <div class="card" onclick="openLightbox(27)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDoCdjkgdaVnZcdOeKeQCwJFBAOMigQKSRk0Uo4ooGf/9k=" alt="">
-        <img class="full" src="作品集/28.webp" alt="作品 28" loading="lazy" onerror="this.onerror=null;this.src='作品集/28.png'">
-        <span class="number">28</span>
-      </div>
-      <div class="card" onclick="openLightbox(28)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDdnYxAFQ7bjzjnFUreS1gUxxRNFK5JSOTILGtOQcCsHSJpJdokcvmTB3cnH1obItqbseSgLA575op6qFGAMCigqx//2Q==" alt="">
-        <img class="full" src="作品集/29.webp" alt="作品 29" loading="lazy" onerror="this.onerror=null;this.src='作品集/29.png'">
-        <span class="number">29</span>
-      </div>
-      <div class="card" onclick="openLightbox(29)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDoY23Fjg/eI602ckdDipqjkUMfmAP1oJlsCMdgz1opoAAwBgUUyLn/2Q==" alt="">
-        <img class="full" src="作品集/30.webp" alt="作品 30" loading="lazy" onerror="this.onerror=null;this.src='作品集/30.png'">
-        <span class="number">30</span>
-      </div>
-      <div class="card" onclick="openLightbox(30)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDojn5sNg5+tMBk4/ejgc/L14qYqD2HrTTGmPuigTGwuxTL5yT0IxiigKF4UYopk3P/2Q==" alt="">
-        <img class="full" src="作品集/31.webp" alt="作品 31" loading="lazy" onerror="this.onerror=null;this.src='作品集/31.png'">
-        <span class="number">31</span>
-      </div>
-      <div class="card" onclick="openLightbox(31)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDogBuzzz7/ANKXGacAMdKMUARkUU5utFArH//Z" alt="">
-        <img class="full" src="作品集/32.webp" alt="作品 32" loading="lazy" onerror="this.onerror=null;this.src='作品集/32.png'">
-        <span class="number">32</span>
-      </div>
-      <div class="card" onclick="openLightbox(32)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDamkYvIg+XBGCT1/Wo3ULzvIJbP3jVtlUvkgdc1RKKZjkfxf0NZy0d2OLdi1YPK8JMpJbd3GKKfAMR9+eetFWtgbu7n//Z" alt="">
-        <img class="full" src="作品集/33.webp" alt="作品 33" loading="lazy" onerror="this.onerror=null;this.src='作品集/33.png'">
-        <span class="number">33</span>
-      </div>
-      <div class="card" onclick="openLightbox(33)">
-        <img class="thumb" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDpNw3EZ5Hao7eVpVYshXBwKlxS0AMjkSRdyMGGcZFFOVQowoAHtRQB/9k=" alt="">
-        <img class="full" src="作品集/34.webp" alt="作品 34" loading="lazy" onerror="this.onerror=null;this.src='作品集/34.png'">
-        <span class="number">34</span>
-      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 04. PORTFOLIO ==================== -->
+<section class="section reveal" id="portfolio">
+  <div class="section-header">
+    <div class="section-number">04.</div>
+    <div class="section-title-group">
+      <h2 class="section-title">作品集</h2>
+      <div class="section-en">PORTFOLIO</div>
+    </div>
+  </div>
+  <div class="portfolio-preview" id="gallery"></div>
+</section>
+
+<!-- ==================== PORTFOLIO FULL OVERLAY ==================== -->
+<div class="portfolio-overlay" id="portfolioOverlay">
+  <div class="portfolio-overlay-header">
+    <span class="portfolio-overlay-title">作品集</span>
+    <span class="portfolio-overlay-count" id="overlayCount">共 34 张</span>
+  </div>
+  <button class="portfolio-overlay-close" id="overlayClose">&times;</button>
+  <div class="portfolio-overlay-inner" id="overlayInner"></div>
 </div>
 
-<div class="lightbox" id="lightbox">
-  <span class="close" id="closeBtn">&times;</span>
-  <span class="nav prev" id="prevBtn">&lsaquo;</span>
-  <span class="nav next" id="nextBtn">&rsaquo;</span>
-  <img src="" alt="" id="lightboxImg">
-  <span class="counter" id="counter"></span>
-</div>
+<!-- ==================== 05. ABOUT ME ==================== -->
+<section class="section reveal" id="about">
+  <div class="section-header">
+    <div class="section-number">05.</div>
+    <div class="section-title-group">
+      <h2 class="section-title">关于我</h2>
+      <div class="section-en">ABOUT ME</div>
+    </div>
+  </div>
+  <p class="about-text">
+    我是一名拥有10年+经验的资深UI/UX设计师，聚焦B端后台、物流供应链与移动端体验设计。我擅长将复杂业务目标转化为清晰的产品体验，通过系统化的设计方法提升效率与价值。期待与优秀的团队一起，打造更好的产品体验。
+  </p>
+  <div class="about-contact">
+    <div class="about-contact-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+      <a href="mailto:847697906@qq.com">847697906@qq.com</a>
+    </div>
+    <div class="about-contact-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      <span>18971679372</span>
+    </div>
+    <div class="about-contact-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span>武汉 · 可远程</span>
+    </div>
+  </div>
+</section>
 
-<footer>作品集 · 图片已 WebP 优化（31.6MB → 4.5MB）</footer>
 
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <p class="footer-text">&copy; 2025 杨明 UI/UX Design</p>
+</footer>
+
+<!-- ==================== SCRIPTS ==================== -->
 <script>
-  const TOTAL = 34;
-  // 收集所有清晰图引用
-  const fullImages = document.querySelectorAll('.card .full');
-  const images = [];  // lightbox 用的路径
+// ── Theme Toggle ──
+(function() {
+  const html = document.documentElement;
+  const btn = document.getElementById('themeToggle');
+  const saved = localStorage.getItem('theme');
+  if (saved) html.setAttribute('data-theme', saved);
+  btn.textContent = html.getAttribute('data-theme') === 'dark' ? '◑' : '◐';
+  btn.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    btn.textContent = next === 'dark' ? '◑' : '◐';
+  });
+})();
 
-  // 图片加载完成后淡入，隐藏模糊占位
-  fullImages.forEach(function(img) {
-    images.push(img.src);
-    if (img.complete) {
-      img.classList.add('loaded');
-    } else {
-      img.addEventListener('load', function() {
-        img.classList.add('loaded');
-      });
-      img.addEventListener('error', function() {
-        img.classList.add('loaded');
-      });
+// ── Mobile Menu ──
+(function() {
+  const btn = document.getElementById('mobileMenuBtn');
+  const nav = document.getElementById('navLinks');
+  btn.addEventListener('click', (e) => { e.stopPropagation(); nav.classList.toggle('open'); });
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nav.classList.remove('open')));
+  document.addEventListener('click', (e) => {
+    if (nav.classList.contains('open') && !nav.contains(e.target) && e.target !== btn) {
+      nav.classList.remove('open');
     }
   });
+})();
 
-  // lightbox
-  var lightbox = document.getElementById('lightbox');
-  var lightboxImg = document.getElementById('lightboxImg');
-  var counter = document.getElementById('counter');
-  var currentIndex = 0;
+// ── Hero Canvas Grid ──
+(function() {
+  const canvas = document.getElementById('heroGrid');
+  const hero = document.getElementById('hero');
+  if (!canvas || !hero) return;
+  const ctx = canvas.getContext('2d');
+  const SPACING = 20;
+  const RADIUS = 80; // mouse influence radius
+  let mx = -999, my = -999, rafId;
 
-  function openLightbox(index) {
-    currentIndex = index;
-    showImage();
-    lightbox.classList.add('active');
-    document.body.style.overflow = 'hidden';
+  function resize() {
+    const r = hero.getBoundingClientRect();
+    canvas.width = r.width;
+    canvas.height = r.height;
   }
 
-  function closeLightbox() {
-    lightbox.classList.remove('active');
+  function draw() {
+    const w = canvas.width, h = canvas.height;
+    ctx.clearRect(0, 0, w, h);
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const baseAlpha = isDark ? 0.04 : 0.06;
+    const peakAlpha = isDark ? 0.25 : 0.22;
+
+    for (let x = SPACING; x < w; x += SPACING) {
+      for (let y = SPACING; y < h; y += SPACING) {
+        const dx = mx - x, dy = my - y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const t = Math.max(0, 1 - dist / RADIUS);
+        const alpha = baseAlpha + (peakAlpha - baseAlpha) * t * t;
+        ctx.fillStyle = isDark ? `rgba(255,255,255,${alpha})` : `rgba(0,0,0,${alpha})`;
+        ctx.beginPath();
+        ctx.arc(x, y, 1, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    rafId = requestAnimationFrame(draw);
+  }
+
+  hero.addEventListener('mousemove', function(e) {
+    const r = hero.getBoundingClientRect();
+    mx = e.clientX - r.left;
+    my = e.clientY - r.top;
+  });
+  hero.addEventListener('mouseleave', function() { mx = -999; my = -999; });
+  window.addEventListener('resize', resize);
+  resize();
+  rafId = requestAnimationFrame(draw);
+})();
+
+// ── Hero Parallax ──
+(function() {
+  const hero = document.getElementById('hero');
+  if (!hero) return;
+  const circle = document.querySelector('.deco-circle');
+  const block = document.querySelector('.deco-bg-block');
+  const photo = document.querySelector('.hero-photo');
+  if (!circle || !block || !photo) return;
+
+  hero.addEventListener('mousemove', function(e) {
+    const rect = hero.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+    circle.style.transform = `translate(${x * 20}px, ${y * 20}px)`;
+    block.style.transform = `translate(${x * 14}px, ${y * 14}px)`;
+    photo.style.transform = `translate(${x * 8}px, ${y * 8}px)`;
+  });
+
+  hero.addEventListener('mouseleave', function() {
+    circle.style.transform = 'translate(0, 0)';
+    block.style.transform = 'translate(0, 0)';
+    photo.style.transform = 'translate(0, 0)';
+  });
+
+  // Add transition for smooth reset on leave
+  circle.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+  block.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+  photo.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+})();
+
+// ── Scroll Reveal ──
+(function() {
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(el => observer.observe(el));
+})();
+
+// ── Nav Active State ──
+(function() {
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    let current = '';
+    sections.forEach(sec => {
+      const top = sec.offsetTop - 120;
+      if (scrollY >= top) current = sec.getAttribute('id');
+    });
+    links.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+})();
+
+// ── Experience Toggle ──
+(function() {
+  const btn = document.getElementById('expToggle');
+  const folded = document.getElementById('expFolded');
+  btn.addEventListener('click', () => {
+    const expanded = folded.classList.toggle('show');
+    btn.classList.toggle('expanded', expanded);
+    btn.innerHTML = expanded ? '收起 <span class="arrow">▴</span>' : '展开更多经历 <span class="arrow">▾</span>';
+  });
+})();
+
+// ── Portfolio Preview & Full Overlay ──
+(function() {
+  const dir = '作品集/';
+  const files = [
+    '01@1.5x.webp', '02@1.5x.webp', '03@1.5x.webp',
+    '04-1@1.5x.webp', '04-2@1.5x.webp', '04-3@1.5x.webp', '04-4@1.5x.webp', '04-5@1.5x.webp',
+    '05-1@1.5x.webp', '05-2@1.5x.webp', '05-3@1.5x.webp', '05-4@1.5x.webp', '05-5@1.5x.webp',
+    '06-1@1.5x.webp', '06-2@1.5x.webp', '06-3@1.5x.webp', '06-4@1.5x.webp',
+    '07-1@1.5x.webp', '07-2@1.5x.webp', '07-3@1.5x.webp', '07-4@1.5x.webp', '07-5@1.5x.webp', '07-6@1.5x.webp',
+    '08@1.5x.webp', '09@1.5x.webp', '10@1.5x.webp', '11@1.5x.webp', '12@1.5x.webp',
+    '13@1.5x.webp', '14@1.5x.webp', '15@1.5x.webp', '16@1.5x.webp', '17@1.5x.webp',
+    '18@1.5x.webp', '19@1.5x.webp', '20@1.5x.webp', '21@1.5x.webp', '22@1.5x.webp',
+    '23@1.5x.webp', '24@1.5x.webp', '25@1.5x.webp', '26@1.5x.webp', '27@1.5x.webp',
+    '28@1.5x.webp', '29@1.5x.webp', '30@1.5x.webp', '31@1.5x.webp', '32@1.5x.webp',
+    '33@1.5x.webp', '34@1.5x.webp'
+  ];
+  const images = files.map(f => dir + f);
+
+  // ── Background preloading ──
+  (function preloadImages() {
+    const BATCH = 3;
+    const DELAY = 200; // ms between batches
+    let index = 0;
+
+    function loadBatch() {
+      const end = Math.min(index + BATCH, images.length);
+      for (let i = index; i < end; i++) {
+        const img = new Image();
+        img.src = images[i];
+      }
+      index = end;
+      if (index < images.length) {
+        setTimeout(loadBatch, DELAY);
+      }
+    }
+
+    // Start after page is interactive
+    if (document.readyState === 'complete') {
+      setTimeout(loadBatch, 500);
+    } else {
+      window.addEventListener('load', function() { setTimeout(loadBatch, 500); });
+    }
+  })();
+
+  const gallery = document.getElementById('gallery');
+  const overlay = document.getElementById('portfolioOverlay');
+  const overlayInner = document.getElementById('overlayInner');
+  const overlayClose = document.getElementById('overlayClose');
+
+  // Generate 1 preview item (01 only)
+  const previewIndices = [0];
+  previewIndices.forEach(function(idx) {
+    const item = document.createElement('div');
+    item.className = 'portfolio-preview-item';
+
+    const img = document.createElement('img');
+    img.src = images[idx];
+    img.alt = '作品 ' + files[idx];
+
+    const ov = document.createElement('div');
+    ov.className = 'portfolio-preview-overlay';
+
+    const btn = document.createElement('button');
+    btn.className = 'portfolio-preview-btn';
+    btn.textContent = '全屏查看作品集';
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      openOverlay();
+    });
+
+    ov.appendChild(btn);
+    item.appendChild(img);
+    item.appendChild(ov);
+    gallery.appendChild(item);
+  });
+
+  // Generate full overlay content with lazy loading
+  const lazyObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        const src = img.getAttribute('data-src');
+        if (src) {
+          img.src = src;
+          img.removeAttribute('data-src');
+          img.classList.add('loaded');
+        }
+        lazyObserver.unobserve(img);
+      }
+    });
+  }, { rootMargin: '300px 0px' });
+
+  images.forEach(function(src, idx) {
+    const item = document.createElement('div');
+    item.className = 'portfolio-overlay-item';
+    const img = document.createElement('img');
+    img.setAttribute('data-src', src);
+    img.alt = '作品 ' + files[idx];
+    item.appendChild(img);
+    overlayInner.appendChild(item);
+    lazyObserver.observe(img);
+  });
+
+  function openOverlay() {
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    // Scroll to top
+    overlay.scrollTop = 0;
+  }
+
+  function closeOverlay() {
+    overlay.classList.remove('open');
     document.body.style.overflow = '';
   }
 
-  function showImage() {
-    var num = String(currentIndex + 1).padStart(2, '0');
-    lightboxImg.src = images[currentIndex];
-    lightboxImg.alt = '作品 ' + num;
-    counter.textContent = (currentIndex + 1) + ' / ' + TOTAL;
-  }
+  overlayClose.addEventListener('click', closeOverlay);
 
-  function nextImage() {
-    currentIndex = (currentIndex + 1) % TOTAL;
-    showImage();
-  }
-
-  function prevImage() {
-    currentIndex = (currentIndex - 1 + TOTAL) % TOTAL;
-    showImage();
-  }
-
-  document.getElementById('closeBtn').addEventListener('click', function(e) {
-    e.stopPropagation();
-    closeLightbox();
+  // Click on empty area to close
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay || e.target === overlayInner) {
+      closeOverlay();
+    }
   });
-  document.getElementById('prevBtn').addEventListener('click', function(e) {
-    e.stopPropagation();
-    prevImage();
-  });
-  document.getElementById('nextBtn').addEventListener('click', function(e) {
-    e.stopPropagation();
-    nextImage();
-  });
-  lightbox.addEventListener('click', closeLightbox);
-  lightboxImg.addEventListener('click', function(e) { e.stopPropagation(); });
 
+  // Keyboard support
   document.addEventListener('keydown', function(e) {
-    if (!lightbox.classList.contains('active')) return;
-    if (e.key === 'Escape') closeLightbox();
-    if (e.key === 'ArrowRight') nextImage();
-    if (e.key === 'ArrowLeft') prevImage();
+    if (!overlay.classList.contains('open')) return;
+    if (e.key === 'Escape') closeOverlay();
   });
+})();
 </script>
-
 </body>
 </html>
